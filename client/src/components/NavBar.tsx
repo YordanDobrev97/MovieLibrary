@@ -1,5 +1,6 @@
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import { Box, Button, Grid, TextField, AppBar, Toolbar } from '@material-ui/core';
+import { Box, Grid, TextField, AppBar, Toolbar } from '@material-ui/core';
+import Btn from './Button';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -8,11 +9,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     navigation: {
       background: '#F8F9FA',
-    },
-    searchBtn: {
-      marginLeft: '6px',
-      border: '1px solid green',
-      color: 'green'
     },
     searcTextField: {
       marginLeft: '45px',
@@ -31,9 +27,9 @@ const NavBar = () => {
 
           <Box>
             <TextField label="Search movie by title..." className={classes.searcTextField} variant="outlined" size="small" />
-            <Button variant="outlined" className={classes.searchBtn}>
-              Search
-            </Button>
+            <Btn bgc='white' c='green' m='0px 7px 0px 11px' p='9px' br='0' border='1px solid green' text='Search' fz='16px' onClick={() => {
+
+            }} />
           </Box>
         </Grid>
       </AppBar>
