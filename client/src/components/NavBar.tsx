@@ -30,6 +30,12 @@ const NavBar = () => {
             <Btn bgc='white' c='green' m='0px 7px 0px 11px' p='9px' br='0' border='1px solid green' text='Search' fz='16px' onClick={() => {
 
             }} />
+            <Btn bgc='white' c='black' m='0px 7px 0px 11px' p='9px 14px' br='20px' border='1px solid blue' text='Login' fz='16px' onClick={() => {
+
+            }} />
+            <Btn bgc='white' c='black' m='0px 7px 0px 11px' p='9px 14px' br='20px' border='1px solid blue' text='Register' fz='16px' onClick={() => {
+
+            }} />
           </Box>
         </Grid>
       </AppBar>
