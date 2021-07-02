@@ -8,7 +8,8 @@ interface BtnProps {
     c: string;
     m: string;
     p: string;
-    fz: string,
+    fz: string;
+    w: string;
     onClick: () => void;
 }
 
@@ -21,6 +22,7 @@ const Button: React.FC<BtnProps> = ({
     fz,
     bgc,
     c,
+    w,
     onClick,
 }) => {
     return (
@@ -34,6 +36,7 @@ const Button: React.FC<BtnProps> = ({
                 margin: m,
                 padding: p,
                 fontSize: fz,
+                width: w,
             }}
         >
             {text}

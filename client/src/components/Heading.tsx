@@ -39,7 +39,7 @@ const Heading: React.FunctionComponent<HeadingProps> = props => {
         <section id="heading-section" className={classes.headingSection}>
             <h1 className={classes.heading}>{props.heading}</h1>
             <p className={classes.description}>{props.description}</p>
-            <Btn bgc="#0057D8" c='white' m='3px 50px' p='7px 15px' fz='17px' text='Search' br='10px' border='2px solid black' onClick={() => {
+            <Btn bgc="#0057D8" w='10%' c='white' m='3px 50px' p='7px 15px' fz='17px' text='Search' br='10px' border='2px solid black' onClick={() => {
 
             }} />
         </section>
