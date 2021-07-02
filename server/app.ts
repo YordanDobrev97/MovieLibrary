@@ -1,4 +1,6 @@
-import express, { Application, Request, Response } from 'express'
+import express, { Application, Request, Response } from 'express';
+import mongoose from 'mongoose';
+import router from './router';
 
 const app: Application = express();
 const PORT = 8080;
@@ -6,14 +8,7 @@ const PORT = 8080;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get(
-    "/",
-    async (req: Request, res: Response): Promise<Response> => {
-        return res.status(200).send({
-            message: "Hello World!",
-        });
-    }
-);
+app.use('/', router);
 
 try {
     app.listen(PORT, (): void => {
