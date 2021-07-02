@@ -7,6 +7,8 @@ import Heading from './components/Heading';
 import MovieContainer from './components/MovieContainer';
 import Register from './components/Register';
 import Login from './components/Login';
+import Search from './components/Search';
+import SearchPage from './components/SearchPage';
 
 import './App.css';
 
@@ -53,10 +55,7 @@ const App = () => {
             <Link className={classes.link} to='/'>My Movie Collection</Link>
           </Toolbar>
           <Box display='flex'>
-            <TextField label="Search movie by title..." className={classes.searcTextField} variant="outlined" size="small" />
-            <Btn bgc='white' c='green' m='0px 7px 0px 11px' p='9px' br='0' border='1px solid green' text='Search' fz='16px' w='20%' onClick={() => {
-            }} />
-
+            <Search />
             {
               localStorage.getItem('uid') ? (
                 <React.Fragment>
@@ -76,6 +75,7 @@ const App = () => {
       <Switch>
         <Route path='/register' component={Register} />
         <Route path='/login' component={Login} />
+        <Route path='/search' component={SearchPage} />
 
         <Route exact path='/'>
           <Heading heading='Heading' description='Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed doeiusmod tempor incididunt ut labore et dolore magna aliqua' />

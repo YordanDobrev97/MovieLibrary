@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import MovieService from '../services/movie';
 import { Link } from 'react-router-dom';
+import IMovie from '../interfaces/movie';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -19,16 +20,10 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-interface Movie {
-    _id: string;
-    title: string;
-    imageUrl: string;
-}
-
 const MovieContainer = () => {
     const classes = useStyles();
     const [isLoad, setLoad] = useState(false);
-    const [movies, setMovies] = useState<Movie[]>([]);
+    const [movies, setMovies] = useState<IMovie[]>([]);
 
     useEffect(() => {
         MovieService.getAll()

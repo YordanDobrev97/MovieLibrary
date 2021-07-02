@@ -1,6 +1,7 @@
 import React from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import Btn from './Button';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -23,6 +24,17 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         headingSearchBtn: {
             marginLeft: '50px',
+        },
+        searchLink: {
+            background: '#0057D8',
+            width: '10%',
+            color: 'white',
+            margin: '3px 50px',
+            padding: '7px 15px',
+            fontSize: '17px',
+            border: '2px solid black',
+            borderRadius: '20px',
+            textDecoration: 'none',
         }
     }),
 );
@@ -39,9 +51,7 @@ const Heading: React.FunctionComponent<HeadingProps> = props => {
         <section id="heading-section" className={classes.headingSection}>
             <h1 className={classes.heading}>{props.heading}</h1>
             <p className={classes.description}>{props.description}</p>
-            <Btn bgc="#0057D8" w='10%' c='white' m='3px 50px' p='7px 15px' fz='17px' text='Search' br='10px' border='2px solid black' onClick={() => {
-
-            }} />
+            <Link className={classes.searchLink} to='/search'>Search</Link>
         </section>
     )
 }
