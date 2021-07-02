@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,8 +10,6 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import { Box, Grid, TextField, AppBar, Toolbar } from '@material-ui/core';
 import Btn from './components/Button';
 
-import Header from './components/Header';
-import NavBar from './components/NavBar';
 import Heading from './components/Heading';
 import MovieContainer from './components/MovieContainer';
 import Register from './components/Register';
@@ -45,9 +44,13 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-
 const App = () => {
   const classes = useStyles();
+
+  const logout = () => {
+    localStorage.removeItem('uid');
+    window.location.href = "/"
+  }
 
   return (
     <Router>
@@ -59,11 +62,20 @@ const App = () => {
           <Box display='flex'>
             <TextField label="Search movie by title..." className={classes.searcTextField} variant="outlined" size="small" />
             <Btn bgc='white' c='green' m='0px 7px 0px 11px' p='9px' br='0' border='1px solid green' text='Search' fz='16px' w='20%' onClick={() => {
-
             }} />
 
-            <Link className={classes.button} to='/login'>Login</Link>
-            <Link className={classes.button} to='/register'>Register</Link>
+            {
+              localStorage.getItem('uid') ? (
+                <React.Fragment>
+                  <Btn bgc='white' c='green' m='0px 7px 0px 11px' p='9px' br='0' border='1px solid green' text='Logout' fz='16px' w='20%' onClick={logout.bind(this)}>Logout</Btn>
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <Link className={classes.button} to='/login'>Login</Link>
+                  <Link className={classes.button} to='/register'>Register</Link>
+                </React.Fragment>
+              )
+            }
           </Box>
         </Grid>
       </AppBar>
@@ -72,7 +84,7 @@ const App = () => {
         <Route path='/register' component={Register} />
         <Route path='/login' component={Login} />
 
-        <Route path='/'>
+        <Route exact path='/'>
           <Heading heading='Heading' description='Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed doeiusmod tempor incididunt ut labore et dolore magna aliqua' />
           <MovieContainer />
         </Route>

@@ -1,17 +1,12 @@
 import express, { Request, Response } from 'express';
-import User from './entities/User';
-
 const router = express.Router();
+import UserService from './services/user';
 
-router.get('/', async (req: Request, res: Response) => {
-    const newUser = new User({
-        username: 'First user',
-        password: '123456789',
-    })
-
-    await newUser.save();
-
-    res.send(newUser.username);
+router.post('/register', async (req: Request, res: Response) => {
+    const { username, password } = req.body;
+    const token = await UserService.register(username, password);
+    res.json(token);
 })
+
 
 export default router;
