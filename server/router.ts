@@ -15,9 +15,17 @@ router.post('/login', async (req: Request, res: Response) => {
     res.json(token);
 })
 
+router.get('/movies/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+    console.log(id, req.params)
+    const movie = await MovieService.getByTitle(id);
+    res.json(movie);
+})
+
 router.get('/movies', async (req: Request, res: Response) => {
     const movies = await MovieService.getAll();
     res.json(movies);
 })
+
 
 export default router;

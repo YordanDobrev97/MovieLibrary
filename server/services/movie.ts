@@ -5,6 +5,12 @@ const getAll = async () => {
     return data;
 }
 
+const getByTitle = async (title: string) => {
+    const movie = await Movie.findOne({ title: title }).lean();
+    return movie;
+}
+
 export default {
-    getAll
+    getAll,
+    getByTitle,
 }

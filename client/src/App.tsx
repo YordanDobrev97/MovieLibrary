@@ -9,6 +9,7 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Search from './components/Search';
 import SearchPage from './components/SearchPage';
+import Details from './components/Details';
 
 import './App.css';
 
@@ -76,6 +77,7 @@ const App = () => {
         <Route path='/register' component={Register} />
         <Route path='/login' component={Login} />
         <Route path='/search' component={SearchPage} />
+        <Route path='/movies/:title' component={Details} />
 
         <Route exact path='/'>
           <Heading heading='Heading' description='Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed doeiusmod tempor incididunt ut labore et dolore magna aliqua' />
