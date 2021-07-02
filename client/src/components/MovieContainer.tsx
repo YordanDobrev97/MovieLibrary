@@ -1,4 +1,7 @@
+import React, { useState, useEffect } from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import MovieService from '../services/movie';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -16,34 +19,46 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+interface Movie {
+    _id: string;
+    title: string;
+    imageUrl: string;
+}
+
 const MovieContainer = () => {
     const classes = useStyles();
+    const [isLoad, setLoad] = useState(false);
+    const [movies, setMovies] = useState<Movie[]>([]);
 
+    useEffect(() => {
+        MovieService.getAll()
+            .then(data => {
+                setMovies(data);
+                setLoad(true);
+            });
+    }, []);
     return (
         <section>
             <h2 className={classes.favorites}>Your Favorites</h2>
-
-            <div className={classes.movies}>
-                <div>
-                    <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/uCKVbasZH6hCAEcJ9o4Gg5RHaWl.jpg" />
-                </div>
-                <div>
-                    <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/uCKVbasZH6hCAEcJ9o4Gg5RHaWl.jpg" />
-                </div>
-                <div>
-                    <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/uCKVbasZH6hCAEcJ9o4Gg5RHaWl.jpg" />
-                </div>
-                <div>
-                    <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/uCKVbasZH6hCAEcJ9o4Gg5RHaWl.jpg" />
-                </div>
-                <div>
-                    <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/uCKVbasZH6hCAEcJ9o4Gg5RHaWl.jpg" />
-                </div>
-                <div>
-                    <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/uCKVbasZH6hCAEcJ9o4Gg5RHaWl.jpg" />
-                </div>
-            </div>
-        </section>
+            {
+                isLoad ? (
+                    <div className={classes.movies}>
+                        {movies.map((movie) => {
+                            const movieLink = `/movies/${movie.title}`;
+                            return (
+                                <div key={movie._id}>
+                                    <Link to={movieLink}>
+                                        <img src={movie.imageUrl} />
+                                    </Link>
+                                </div>
+                            )
+                        })}
+                    </div>
+                ) : (
+                    <React.Fragment></React.Fragment>
+                )
+            }
+        </section >
     )
 }
 

@@ -1,15 +1,8 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-} from "react-router-dom";
-
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import { Box, Grid, TextField, AppBar, Toolbar } from '@material-ui/core';
 import Btn from './components/Button';
-
 import Heading from './components/Heading';
 import MovieContainer from './components/MovieContainer';
 import Register from './components/Register';
