@@ -16,6 +16,17 @@ const register = async (username: string, password: string) => {
     return token;
 }
 
+const login = async (username: string, password: string) => {
+    const user = await User.findOne({ username: username }).lean();
+    const comparePass: boolean = await bcrypt.compare(password, user?.password || '');
+
+    if (comparePass) {
+        return generateToken(user?._id);
+    }
+
+    return null;
+}
+
 function generateToken(id: Document) {
     return jtw.sign(
         {
@@ -25,4 +36,4 @@ function generateToken(id: Document) {
     );
 }
 
-export default { register };
+export default { register, login };

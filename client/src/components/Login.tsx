@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import Btn from './Button';
+import UserService from '../services/user';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -34,20 +36,30 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Login = () => {
     const classes = useStyles();
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
+    const login = async () => {
+        const token = await UserService.loginUser(username, password);
+        localStorage.setItem('uid', token);
+        window.location.href = "/";
+    }
     return (
         <section className={classes.registerSection}>
             <div className={classes.row}>
-                <input className={classes.input} type="text" placeholder="Username" />
-            </div>
-
-            <div className={classes.row}>
-                <input className={classes.input} type="password" placeholder="Password" />
-            </div>
-
-            <div className={classes.row}>
-                <Btn bgc='white' c='blue' m='0px 7px 0px 11px' p='9px' br='18px' border='1px solid blue' text='Login' fz='16px' w='80%' onClick={() => {
+                <input className={classes.input} type="text" placeholder="Username" onChange={(e) => {
+                    setUsername(e.target.value);
                 }} />
+            </div>
+
+            <div className={classes.row}>
+                <input className={classes.input} type="password" placeholder="Password" onChange={(e) => {
+                    setPassword(e.target.value);
+                }} />
+            </div>
+
+            <div className={classes.row}>
+                <Btn bgc='white' c='blue' m='0px 7px 0px 11px' p='9px' br='18px' border='1px solid blue' text='Login' fz='16px' w='80%' onClick={login.bind(this)} />
             </div>
         </section>
     )
