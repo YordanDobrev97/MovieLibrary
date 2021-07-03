@@ -34,7 +34,7 @@ type Movie = {
 const getUserId = () => {
     const uid = localStorage.getItem('uid');
     const userId = parseJwt(uid || '');
-    return userId['userID'];
+    return userId ? userId['userID'] : '';
 }
 
 const Details = ({ match }: RouteComponentProps<TParams>) => {
@@ -50,12 +50,13 @@ const Details = ({ match }: RouteComponentProps<TParams>) => {
         MovieService.getByTitle(title)
             .then(movie => {
                 setMovie(movie);
-
-                FavoriteService.isAdded(getUserId(), movie?._id || '')
-                    .then(result => {
-                        setLoad(true);
-                        addFavorites(result);
-                    });
+                if (getUserId()) {
+                    FavoriteService.isAdded(getUserId() || '', movie?._id || '')
+                        .then(result => {
+                            addFavorites(result);
+                        });
+                }
+                setLoad(true);
             });
     }, [movie, isAddFavorites]);
 

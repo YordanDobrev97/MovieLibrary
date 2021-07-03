@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const getUserId = () => {
     const uid = localStorage.getItem('uid');
     const userId = parseJwt(uid || '');
-    return userId['userID'];
+    return userId ? userId['userID'] : '';
 }
 
 function parseJwt(token: string) {
@@ -52,19 +52,28 @@ const SearchPage = ({ match }: RouteComponentProps<TParams>) => {
         if (!title) {
             MovieService.getAll()
                 .then(async (data) => {
-                    // I need to think about how to optimize it ?
-                    let result = [];
-                    for (const movie of data) {
-                        const isAdded = await FavoriteService.isAdded(getUserId(), movie._id);
-                        result.push({ ...movie, isAdded })
+                    if (getUserId()) {
+                        // I need to think about how to optimize it ?
+                        let result = [];
+                        for (const movie of data) {
+                            const isAdded = await FavoriteService.isAdded(getUserId(), movie._id);
+                            result.push({ ...movie, isAdded })
+                        }
+                        setMovies(result);
+                    } else {
+                        setMovies(data);
                     }
-                    setMovies(result);
                     setLoad(true);
                 })
         } else {
             MovieService.getByTitle(title)
-                .then(data => {
-                    setMovies([data]);
+                .then(async (data) => {
+                    if (getUserId()) {
+                        const isAdded = await FavoriteService.isAdded(getUserId(), data._id);
+                        setMovies([{ ...data, isAdded }]);
+                    } else {
+                        setMovies([data]);
+                    }
                     setLoad(true);
                 })
         }
