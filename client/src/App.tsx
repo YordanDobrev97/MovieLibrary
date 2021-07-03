@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import { Box, Grid, TextField, AppBar, Toolbar } from '@material-ui/core';
+import { Box, Grid, AppBar, Toolbar } from '@material-ui/core';
 import Btn from './components/Button';
 import Heading from './components/Heading';
 import MovieContainer from './components/MovieContainer';
@@ -72,13 +72,11 @@ const App = () => {
           </Box>
         </Grid>
       </AppBar>
-
       <Switch>
         <Route path='/register' component={Register} />
         <Route path='/login' component={Login} />
-        <Route path='/search' component={SearchPage} />
+        <Route path='/search/:title?' component={SearchPage} />
         <Route path='/movies/:title' component={Details} />
-
         <Route exact path='/'>
           <Heading heading='Heading' description='Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed doeiusmod tempor incididunt ut labore et dolore magna aliqua' />
           <MovieContainer />

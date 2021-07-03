@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import { RouteComponentProps } from "react-router-dom";
 import Search from './Search';
 import SearchList from './SearchList';
 import IMovie from '../interfaces/movie';
@@ -17,17 +18,30 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const SearchPage = () => {
+type TParams = { title: string };
+
+const SearchPage = ({ match }: RouteComponentProps<TParams>) => {
     const classes = useStyles();
     const [movies, setMovies] = useState<IMovie[]>([]);
     const [isLoad, setLoad] = useState(false);
 
     useEffect(() => {
-        MovieService.getAll()
-            .then(data => {
-                setMovies(data);
-                setLoad(true);
-            });
+        const { title } = match.params;
+
+        if (!title) {
+            MovieService.getAll()
+                .then(data => {
+                    setMovies(data);
+                    setLoad(true);
+                });
+        } else {
+            MovieService.getByTitle(title)
+                .then(data => {
+                    setMovies([data]);
+                    setLoad(true);
+                })
+        }
+
     }, []);
 
     return (

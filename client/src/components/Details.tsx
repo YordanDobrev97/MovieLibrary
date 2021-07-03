@@ -3,6 +3,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import Btn from './Button';
 import Review from './Review';
+import MovieService from '../services/movie';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -35,12 +36,12 @@ const Details = ({ match }: RouteComponentProps<TParams>) => {
     const [isLoad, setLoad] = useState(false);
 
     useEffect(() => {
-        fetch(`http://localhost:8080/movies/${title}`)
-            .then(r => r.json())
-            .then(data => {
-                setMovie(data);
+        MovieService.getByTitle(title)
+            .then(movie => {
+                setMovie(movie);
                 setLoad(true);
-            })
+            });
+
     }, []);
 
     return (
