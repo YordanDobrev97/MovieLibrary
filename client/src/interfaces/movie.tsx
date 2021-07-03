@@ -3,4 +3,5 @@ export default interface Movie {
     title: string;
     imageUrl: string;
     description: string;
+    isAdded: boolean;
 }

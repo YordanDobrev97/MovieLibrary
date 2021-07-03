@@ -3,6 +3,11 @@ import jtw from 'jsonwebtoken';
 import User from '../entities/User';
 const privateKey = "secret";
 
+const existUser = async (userId: string) => {
+    const user = await User.exists({ _id: userId });
+    return user;
+}
+
 const register = async (username: string, password: string) => {
     const salt = await bcrypt.genSalt(8);
     const hashPassword = await bcrypt.hash(password, salt);
@@ -36,4 +41,4 @@ function generateToken(id: Document) {
     );
 }
 
-export default { register, login };
+export default { register, login, existUser };

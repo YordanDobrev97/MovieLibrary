@@ -3,6 +3,7 @@ const router = express.Router();
 import UserService from './services/user';
 import MovieService from './services/movie';
 import RatingService from './services/rating';
+import FavoriteService from './services/favorite';
 
 router.post('/register', async (req: Request, res: Response) => {
     const { username, password } = req.body;
@@ -22,6 +23,29 @@ router.post('/rating', async (req: Request, res: Response) => {
     res.json(result);
 })
 
+router.post('/favorites/add', async (req: Request, res: Response) => {
+    const { userId, movieId } = req.body;
+    const result = await FavoriteService.add(userId, movieId);
+    res.json(result);
+})
+
+router.post('/favorites/isAdded', async (req: Request, res: Response) => {
+    const { userId, movieId } = req.body;
+    const result = await FavoriteService.isAdded(userId, movieId);
+    res.json(result);
+})
+
+router.post('/favorites/remove', async (req: Request, res: Response) => {
+    const { userId, movieId } = req.body;
+    const result = await FavoriteService.remove(userId, movieId);
+    res.json(result);
+})
+
+router.get('/favorites', async (req: Request, res: Response) => {
+    const favorites = await FavoriteService.getAll();
+    res.json(favorites);
+})
+
 router.get('/rating/all?:title', async (req: Request, res: Response) => {
     const title = req.query.title as string;
     const result = await RatingService.getVotes(title);
@@ -34,10 +58,9 @@ router.get('/movies/:id', async (req: Request, res: Response) => {
     res.json(movie);
 })
 
-router.get('/movies', async (req: Request, res: Response) => {
+router.get('/movies/', async (req: Request, res: Response) => {
     const movies = await MovieService.getAll();
     res.json(movies);
 })
-
 
 export default router;

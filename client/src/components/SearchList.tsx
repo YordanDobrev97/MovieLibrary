@@ -2,6 +2,7 @@ import Btn from './Button';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import IMovie from '../interfaces/movie';
+import React, { useEffect, useState } from 'react';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -24,6 +25,15 @@ type MovieList = {
 
 const SearchList: React.FC<MovieList> = props => {
     const classes = useStyles();
+    const [isLoad, setLoad] = useState(false);
+
+    useEffect(() => {
+        setLoad(true);
+    })
+
+    if (!isLoad) {
+        return <React.Fragment>Loading...</React.Fragment>
+    }
 
     return (
         <div>
@@ -39,8 +49,15 @@ const SearchList: React.FC<MovieList> = props => {
                                     <Link to={movieLink}>{movie.title}</Link>
                                 </h3>
                                 <p className={classes.description}>{movie.description}</p>
-                                <Btn bgc='white' c='green' m='40px 7px 0px 11px' p='9px' br='0' border='1px solid green' text='Add to favorites' fz='16px' w='30%' onClick={() => {
-                                }} />
+                                {
+                                    movie.isAdded ? (
+                                        <Btn bgc='white' c='red' m='40px 7px 0px 11px' p='9px' br='0' border='1px solid red' text='Remove From Favorites' fz='16px' w='30%' onClick={() => {
+                                        }} />
+                                    ) : (
+                                        <Btn bgc='white' c='green' m='40px 7px 0px 11px' p='9px' br='0' border='1px solid green' text='Add to favorites' fz='16px' w='30%' onClick={() => {
+                                        }} />
+                                    )
+                                }
                             </div>
                         </div>
                     )

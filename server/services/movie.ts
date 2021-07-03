@@ -1,16 +1,13 @@
 import Movie from '../entities/Movie';
 
-const getAll = async () => {
-    const data = await Movie.find().lean();
-    return data;
-}
+const existMovie = async (movieId: string) => await Movie.findOne({ _id: movieId }).lean() != null;
 
-const getByTitle = async (title: string) => {
-    const movie = await Movie.findOne({ title: title }).lean();
-    return movie;
-}
+const getAll = async () => await Movie.find({}).lean();
+
+const getByTitle = async (title: string) => await Movie.findOne({ title: title }).lean();
 
 export default {
     getAll,
     getByTitle,
+    existMovie
 }
