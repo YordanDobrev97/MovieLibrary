@@ -27,8 +27,6 @@ const loginUser = async (username: string, password: string) => {
     return await response.json();
 }
 
-
-
 export default {
     registerUser,
     loginUser,

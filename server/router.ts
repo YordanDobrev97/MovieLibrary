@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 const router = express.Router();
 import UserService from './services/user';
 import MovieService from './services/movie';
+import RatingService from './services/rating';
 
 router.post('/register', async (req: Request, res: Response) => {
     const { username, password } = req.body;
@@ -15,9 +16,20 @@ router.post('/login', async (req: Request, res: Response) => {
     res.json(token);
 })
 
+router.post('/rating', async (req: Request, res: Response) => {
+    const { note, rating, title } = req.body;
+    const result = await RatingService.addRating(rating, note, title);
+    res.json(result);
+})
+
+router.get('/rating/all?:title', async (req: Request, res: Response) => {
+    const title = req.query.title as string;
+    const result = await RatingService.getVotes(title);
+    res.json(result);
+})
+
 router.get('/movies/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
-    console.log(id, req.params)
     const movie = await MovieService.getByTitle(id);
     res.json(movie);
 })

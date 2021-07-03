@@ -51,7 +51,6 @@ const Details = ({ match }: RouteComponentProps<TParams>) => {
                     <section>
                         <div className={classes.searchList}>
                             <img src={movie?.imageUrl} />
-
                             <div className={classes.movie}>
                                 <h3>{movie?.title}</h3>
                                 <p className={classes.description}>{movie?.description}</p>
@@ -59,7 +58,7 @@ const Details = ({ match }: RouteComponentProps<TParams>) => {
                                 }} />
                             </div>
                         </div>
-                        <Review />
+                        <Review title={movie?.title || ''} />
                     </section>
                 ) : (
                     <React.Fragment></React.Fragment>
