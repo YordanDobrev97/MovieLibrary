@@ -32,7 +32,8 @@ const add = async (userId: string, movieId: string) => {
 }
 
 const remove = async (userId: string, movieId: string) => {
-
+    const favorite = await Favorite.deleteOne({ userId, movieId }).lean();
+    return true;
 }
 
 export default {
