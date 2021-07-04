@@ -53,7 +53,6 @@ const SearchPage = ({ match }: RouteComponentProps<TParams>) => {
             MovieService.getAll()
                 .then(async (data) => {
                     if (getUserId()) {
-                        // I need to think about how to optimize it ?
                         let result = [];
                         for (const movie of data) {
                             const isAdded = await FavoriteService.isAdded(getUserId(), movie._id);
@@ -68,12 +67,17 @@ const SearchPage = ({ match }: RouteComponentProps<TParams>) => {
         } else {
             MovieService.getByTitle(title)
                 .then(async (data) => {
-                    if (getUserId()) {
-                        const isAdded = await FavoriteService.isAdded(getUserId(), data._id);
-                        setMovies([{ ...data, isAdded }]);
+                    if (data) {
+                        if (getUserId()) {
+                            const isAdded = await FavoriteService.isAdded(getUserId(), data._id);
+                            setMovies([{ ...data, isAdded }]);
+                        } else {
+                            setMovies([data]);
+                        }
                     } else {
-                        setMovies([data]);
+                        setMovies([]);
                     }
+
                     setLoad(true);
                 })
         }
