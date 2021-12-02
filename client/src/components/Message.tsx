@@ -1,5 +1,5 @@
-import React from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import React from 'react'
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -19,7 +19,7 @@ type MessageProps = {
 
 
 const Message: React.FC<MessageProps> = props => {
-    const classes = useStyles();
+    const classes = useStyles()
 
     return (
         <div style={{ display: props.isActive ? 'block' : 'none' }}>

@@ -1,7 +1,6 @@
-import React from 'react';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import Btn from './Button';
-import { Link } from 'react-router-dom';
+import React from 'react'
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -45,7 +44,7 @@ type HeadingProps = {
 }
 
 const Heading: React.FunctionComponent<HeadingProps> = props => {
-    const classes = useStyles();
+    const classes = useStyles()
 
     return (
         <section id="heading-section" className={classes.headingSection}>
@@ -56,4 +55,4 @@ const Heading: React.FunctionComponent<HeadingProps> = props => {
     )
 }
 
-export default Heading;
+export default Heading

@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import { TextField } from '@material-ui/core';
-import Btn from './Button';
-import AppContext from '../context/AppContext';
+import React, { useState } from 'react'
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
+import { TextField } from '@material-ui/core'
+import Btn from './Button'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -15,30 +14,28 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+type SearchMovie = {
+    search: (title: string) => void
+}
 
-const Search = () => {
-    const classes = useStyles();
-    const [textField, setField] = useState('');
-    const [isRedirect, setRedirect] = useState(false);
+const Search: React.FC<SearchMovie> = props => {
+    const classes = useStyles()
+    const [textField, setField] = useState('')
 
-    const search = () => {
-        setRedirect(true);
-    }
-
-    if (isRedirect) {
-        window.location.href = `/search/${textField}`;
+    const searchMovie = () => {
+        props.search(textField)
     }
 
     return (
         <React.Fragment>
-            <AppContext.Provider value={{ setSearchField: search }}>
-                <TextField label="Search movie by title..." onChange={(e) => {
-                    setField(e.target.value)
-                }} className={classes.searcTextField} variant="outlined" size="small" />
-                <Btn bgc='white' c='green' m='0px 7px 0px 11px' p='9px' br='0' border='1px solid green' text='Search' fz='16px' w='20%' onClick={search.bind(this)} />
-            </AppContext.Provider>
+            <TextField label="Search movie by title..." onChange={(e) => {
+                setField(e.target.value)
+            }} className={classes.searcTextField} variant="outlined" size="small" />
+
+            <Btn bgc='white' c='green' m='0px 7px 0px 11px' p='9px' br='0' border='1px solid green'
+                text='Search' fz='16px' w='20%' onClick={searchMovie} />
         </React.Fragment>
     )
 }
 
-export default Search;
+export default Search

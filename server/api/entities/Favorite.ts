@@ -1,5 +1,5 @@
-import mongoose from '../config/db';
-import IFavorite from '../interfaces/favorite';
+import mongoose from '../config/db'
+import IFavorite from '../interfaces/favorite'
 
 const FavoriteSchema: mongoose.Schema = new mongoose.Schema(
     {
@@ -8,5 +8,5 @@ const FavoriteSchema: mongoose.Schema = new mongoose.Schema(
     }
 )
 
-export default mongoose.model<IFavorite>('Favorite', FavoriteSchema);
+export default mongoose.model<IFavorite>('Favorite', FavoriteSchema)
 

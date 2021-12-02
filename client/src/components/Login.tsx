@@ -1,7 +1,10 @@
-import { useState } from 'react'
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import { useState, useContext } from 'react'
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
 import Btn from './Button';
-import UserService from '../services/user';
+import UserService from '../services/user'
+import { useCookies } from 'react-cookie'
+import { useNavigate } from 'react-router-dom'
+import AuthContext from '../context/AuthContext'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -36,13 +39,17 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Login = () => {
     const classes = useStyles();
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [cookies, setCookie] = useCookies(['jwt'])
+    const navigate = useNavigate()
+    const context = useContext(AuthContext)
 
     const login = async () => {
-        const token = await UserService.loginUser(username, password);
-        localStorage.setItem('uid', token);
-        window.location.href = "/";
+        const token: string = await UserService.loginUser(username, password)
+        context.setAuthenticated(true)
+        setCookie("jwt", token)
+        navigate('/')
     }
     return (
         <section className={classes.registerSection}>

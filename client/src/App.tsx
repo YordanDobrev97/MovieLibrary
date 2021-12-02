@@ -1,89 +1,41 @@
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import { Box, Grid, AppBar, Toolbar } from '@material-ui/core';
-import Btn from './components/Button';
-import Heading from './components/Heading';
-import MovieContainer from './components/MovieContainer';
-import Register from './components/Register';
-import Login from './components/Login';
-import Search from './components/Search';
-import SearchPage from './components/SearchPage';
-import Details from './components/Details';
+import { useState } from 'react'
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
+import Home from './components/Home'
+import Register from './components/Register'
+import Login from './components/Login'
+import SearchPage from './components/SearchPage'
+import Details from './components/Details'
+import Profile from './components/Profile'
+import Navbar from './components/Navbar'
+import AuthContext from './context/AuthContext'
+import { useCookies } from 'react-cookie'
 
-import './App.css';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    title: {
-      color: 'black'
-    },
-    navigation: {
-      background: '#F8F9FA',
-    },
-    searcTextField: {
-      marginLeft: '45px',
-    },
-    link: {
-      textDecoration: 'none'
-    },
-    button: {
-      background: 'white',
-      color: 'blue',
-      margin: '0px 7px 0px 11px',
-      padding: '9px',
-      borderRadius: '15px',
-      border: '1px solid blue',
-      fontSize: '16px',
-      textDecoration: 'none'
-    }
-  }),
-);
+import './App.css'
 
 const App = () => {
-  const classes = useStyles();
+  const [cookies] = useCookies(['jwt'])
+  const [isAuthenticated, setAuthenticated] = useState(cookies?.jwt || false)
 
   const logout = () => {
-    localStorage.removeItem('uid');
-    window.location.href = "/"
+    setAuthenticated(false)
   }
 
   return (
     <Router>
-      <AppBar position="static" className={classes.navigation}>
-        <Grid container direction="row" justify="space-between" alignItems="baseline">
-          <Toolbar className={classes.title}>
-            <Link className={classes.link} to='/'>My Movie Collection</Link>
-          </Toolbar>
-          <Box display='flex'>
-            <Search />
-            {
-              localStorage.getItem('uid') ? (
-                <React.Fragment>
-                  <Btn bgc='white' c='green' m='0px 7px 0px 11px' p='9px' br='0' border='1px solid green' text='Logout' fz='16px' w='20%' onClick={logout.bind(this)}>Logout</Btn>
-                </React.Fragment>
-              ) : (
-                <React.Fragment>
-                  <Link className={classes.button} to='/login'>Login</Link>
-                  <Link className={classes.button} to='/register'>Register</Link>
-                </React.Fragment>
-              )
-            }
-          </Box>
-        </Grid>
-      </AppBar>
-      <Switch>
-        <Route path='/register' component={Register} />
-        <Route path='/login' component={Login} />
-        <Route path='/search/:title?' component={SearchPage} />
-        <Route path='/movies/:title' component={Details} />
-        <Route exact path='/'>
-          <Heading heading='Heading' description='Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed doeiusmod tempor incididunt ut labore et dolore magna aliqua' />
-          <MovieContainer />
-        </Route>
-      </Switch>
+      <AuthContext.Provider value={{ isAuthenticated, setAuthenticated }}>
+        <Navbar logout={logout.bind(this)} />
+
+        <Routes>
+          <Route path='/register' element={<Register />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/search' element={<SearchPage />} />
+          <Route path='/movies/:title' element={<Details />} />
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/' element={<Home />} />
+        </Routes>
+      </AuthContext.Provider>
     </Router>
   );
 }
 
-export default App;
+export default App

@@ -1,5 +1,7 @@
+import URL_API from '../utils/urlApi'
+
 const add = async (userId: string, movieId: string) => {
-    const response = await fetch('http://localhost:8080/favorites/add', {
+    const response = await fetch(`${URL_API}/api/user/favorites/add`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
@@ -13,7 +15,7 @@ const add = async (userId: string, movieId: string) => {
 }
 
 const remove = async (userId: string, movieId: string) => {
-    const response = await fetch('http://localhost:8080/favorites/remove', {
+    const response = await fetch(`${URL_API}/api/user/favorites/remove`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
@@ -27,7 +29,7 @@ const remove = async (userId: string, movieId: string) => {
 }
 
 const isAdded = async (userId: string, movieId: string) => {
-    const response = await fetch('http://localhost:8080/favorites/isAdded', {
+    const response = await fetch(`${URL_API}/api/user/favorites/isAdded`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",

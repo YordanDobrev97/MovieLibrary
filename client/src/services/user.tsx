@@ -1,6 +1,7 @@
+import URL_API from '../utils/urlApi'
 
 const registerUser = async (username: string, password: string) => {
-    const response = await fetch('http://localhost:8080/register', {
+    const response = await fetch(`${URL_API}/api/auth/register`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
@@ -14,7 +15,7 @@ const registerUser = async (username: string, password: string) => {
 }
 
 const loginUser = async (username: string, password: string) => {
-    const response = await fetch('http://localhost:8080/login', {
+    const response = await fetch(`${URL_API}/api/auth/login`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
@@ -27,7 +28,13 @@ const loginUser = async (username: string, password: string) => {
     return await response.json();
 }
 
+const favoriteMovies = async (userId: string) => {
+    const response = await fetch(`${URL_API}/api/user/favorites/${userId}`)
+    return await response.json()
+}
+
 export default {
     registerUser,
     loginUser,
+    favoriteMovies
 }

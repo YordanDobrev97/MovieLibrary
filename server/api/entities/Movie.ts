@@ -1,5 +1,5 @@
-import mongoose from '../config/db';
-import IMovie from '../interfaces/user';
+import mongoose from '../config/db'
+import IMovie from '../interfaces/user'
 
 const MovieSchema: mongoose.Schema = new mongoose.Schema(
     {
@@ -9,5 +9,5 @@ const MovieSchema: mongoose.Schema = new mongoose.Schema(
     }
 )
 
-export default mongoose.model<IMovie>('Movie', MovieSchema);
+export default mongoose.model<IMovie>('Movie', MovieSchema)
 

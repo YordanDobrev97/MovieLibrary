@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import Btn from './Button';
-import UserService from '../services/user';
+import React, { useState, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
+import Btn from './Button'
+import UserService from '../services/user'
+import { useCookies } from 'react-cookie'
+import AuthContext from '../context/AuthContext'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -33,15 +36,14 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-interface RegisterProps {
-    setLoggedIn: () => void
-}
-
-const Register: React.FC<RegisterProps> = props => {
+const Register: React.FC = props => {
     const classes = useStyles();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [cookies, setCookie] = useCookies(['jwt'])
+    const navigate = useNavigate()
+    const context = useContext(AuthContext)
 
     const registerUser = async () => {
         if (confirmPassword !== password) {
@@ -49,8 +51,9 @@ const Register: React.FC<RegisterProps> = props => {
         }
 
         const token = await UserService.registerUser(username, password);
-        localStorage.setItem('uid', token);
-        window.location.href = "/"
+        setCookie('jwt', token)
+        context.setAuthenticated(true)
+        navigate('/')
     }
 
     return (

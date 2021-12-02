@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import MovieService from '../services/movie';
-import { Link } from 'react-router-dom';
-import IMovie from '../interfaces/movie';
+import React, { useState, useEffect } from 'react'
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
+import MovieService from '../services/movie'
+import { Link } from 'react-router-dom'
+import IMovie from '../interfaces/movie'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -21,16 +21,17 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const MovieContainer = () => {
-    const classes = useStyles();
-    const [isLoad, setLoad] = useState(false);
-    const [movies, setMovies] = useState<IMovie[]>([]);
+    const classes = useStyles()
+    const [isLoad, setLoad] = useState(false)
+    const [movies, setMovies] = useState<IMovie[]>([])
 
     useEffect(() => {
-        MovieService.getAll()
-            .then(data => {
-                setMovies(data);
-                setLoad(true);
-            });
+        const fetchMovie = async () => {
+            const movies = await MovieService.getAll()
+            setMovies(movies)
+            setLoad(true)
+        }
+        fetchMovie()
     }, []);
     return (
         <section>
@@ -53,8 +54,8 @@ const MovieContainer = () => {
                     <React.Fragment></React.Fragment>
                 )
             }
-        </section >
+        </section>
     )
 }
 
-export default MovieContainer;
+export default MovieContainer

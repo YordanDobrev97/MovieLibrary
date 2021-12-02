@@ -1,14 +1,14 @@
-import Rating from '../entities/Rating';
+import Rating from '../entities/Rating'
 
 const getVotes = async (title: string) => {
-    const rating = await getByTitle(title);
+    const rating = await getByTitle(title)
     return {
         rating: rating?.rating
     };
 }
 
 const addRating = async (rating: number, note: string, title: string) => {
-    let result = await getByTitle(title);
+    let result = await getByTitle(title)
 
     if (!result) {
         const newRating = new Rating({
@@ -17,18 +17,18 @@ const addRating = async (rating: number, note: string, title: string) => {
             title
         })
 
-        result = await newRating.save();
+        result = await newRating.save()
     } else {
-        result.rating += rating;
-        result?.save();
+        result.rating += rating
+        result?.save()
     }
 
-    return result.id;
+    return 'Your note was successfully added'
 }
 
 const getByTitle = async (title: string) => {
-    const rating = await Rating.findOne({ title: title });
-    return rating;
+    const rating = await Rating.findOne({ title: title })
+    return rating
 }
 
 export default {

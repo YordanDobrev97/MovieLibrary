@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import { RouteComponentProps } from "react-router-dom";
-import Search from './Search';
-import SearchList from './SearchList';
-import IMovie from '../interfaces/movie';
-import MovieService from '../services/movie';
-import FavoriteService from '../services/favorite';
+import React, { useState } from 'react'
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
+import { Alert } from '@material-ui/lab'
+import Search from './Search'
+import IMovie from '../interfaces/movie'
+import MovieService from '../services/movie'
+import Movie from './Movie'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -26,78 +25,41 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const getUserId = () => {
-    const uid = localStorage.getItem('uid');
-    const userId = parseJwt(uid || '');
-    return userId ? userId['userID'] : '';
-}
+const SearchPage: React.FC = props => {
+    const classes = useStyles()
+    const [movie, setMovie] = useState<IMovie>()
+    const [searchInvalid, setSearchInvalid] = useState(false)
 
-function parseJwt(token: string) {
-    if (!token) { return; }
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace('-', '+').replace('_', '/');
-    return JSON.parse(window.atob(base64));
-}
-
-type TParams = { title: string };
-
-const SearchPage = ({ match }: RouteComponentProps<TParams>) => {
-    const classes = useStyles();
-    const [movies, setMovies] = useState<IMovie[]>([]);
-    const [isLoad, setLoad] = useState(false);
-
-    useEffect(() => {
-        const { title } = match.params;
-
-        if (!title) {
-            MovieService.getAll()
-                .then(async (data) => {
-                    if (getUserId()) {
-                        let result = [];
-                        for (const movie of data) {
-                            const isAdded = await FavoriteService.isAdded(getUserId(), movie._id);
-                            result.push({ ...movie, isAdded })
-                        }
-                        setMovies(result);
-                    } else {
-                        setMovies(data);
-                    }
-                    setLoad(true);
-                })
+    const search = async (title: string) => {
+        const movie = await MovieService.getByTitle(title)
+        if (movie) {
+            setMovie(movie)
         } else {
-            MovieService.getByTitle(title)
-                .then(async (data) => {
-                    if (data) {
-                        if (getUserId()) {
-                            const isAdded = await FavoriteService.isAdded(getUserId(), data._id);
-                            setMovies([{ ...data, isAdded }]);
-                        } else {
-                            setMovies([data]);
-                        }
-                    } else {
-                        setMovies([]);
-                    }
-
-                    setLoad(true);
-                })
+            setSearchInvalid(true)
         }
-    }, []);
+    }
 
     return (
         <section>
             <article className={classes.searchPage}>
                 <h2 className={classes.searchHeading}>Search</h2>
-                <Search />
-            </article>
-            {
-                isLoad ? (
-                    <SearchList movies={movies} />
+                <Search search={search} />
+
+                {movie ? (
+                    <Movie id={movie?._id || ''} imageUrl={movie?.imageUrl || ''}
+                        title={movie?.title || ''} description={movie?.description || ''} />
                 ) : (
-                    <div className={classes.loading}>Loading...</div>
-                )
-            }
+                    <React.Fragment>
+                        {searchInvalid ? (
+                            <Alert severity="error">Invalid searching...</Alert>
+                        ) : (
+                            <React.Fragment></React.Fragment>
+                        )}
+                    </React.Fragment>
+                )}
+            </article>
         </section>
     )
 }
 
-export default SearchPage;
+export default SearchPage

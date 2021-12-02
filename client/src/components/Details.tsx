@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { RouteComponentProps } from "react-router-dom";
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import Review from './Review';
-import MovieService from '../services/movie';
-import FavoriteService from '../services/favorite';
-import Message from './Message';
-import Favorite from './Favorite';
+import React, { useState, useEffect, useContext } from 'react'
+import { useParams } from 'react-router-dom'
+import { Alert } from '@material-ui/lab'
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
+import Review from './Review'
+import MovieService from '../services/movie'
+import FavoriteService from '../services/favorite'
+import Message from './Message'
+import Favorite from './Favorite'
+import { useCookies } from 'react-cookie'
+import jwtParser from '../utils/jwtParser'
+import AuthContext from '../context/AuthContext'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -22,8 +26,6 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-type TParams = { title: string };
-
 type Movie = {
     _id: string;
     title: string;
@@ -31,33 +33,30 @@ type Movie = {
     description: string;
 }
 
-const getUserId = () => {
-    const uid = localStorage.getItem('uid');
-    const userId = parseJwt(uid || '');
-    return userId ? userId['userID'] : '';
-}
-
-const Details = ({ match }: RouteComponentProps<TParams>) => {
-    const classes = useStyles();
-
-    const title = match ? match.params.title : '';
-    const [movie, setMovie] = useState<Movie>();
-    const [isLoad, setLoad] = useState(false);
-    const [isAddFavorites, addFavorites] = useState(false);
-    const [isActive, setActive] = useState(false);
+const Details: React.FC = props => {
+    const classes = useStyles()
+    const params = useParams()
+    const [movie, setMovie] = useState<Movie>()
+    const [isLoad, setLoad] = useState(false)
+    const [isAddFavorites, addFavorites] = useState(false)
+    const [isActive, setActive] = useState(false)
+    const [cookies] = useCookies(['jwt'])
+    const context = useContext(AuthContext)
 
     useEffect(() => {
-        MovieService.getByTitle(title)
-            .then(movie => {
-                setMovie(movie);
-                if (getUserId()) {
-                    FavoriteService.isAdded(getUserId() || '', movie?._id)
-                        .then(result => {
-                            addFavorites(result);
-                        });
-                }
-                setLoad(true);
-            });
+        const fetchMovie = async (title: string) => {
+            const movie = await MovieService.getByTitle(title)
+            setMovie(movie);
+            const jwt = cookies?.jwt
+            const { userID } = jwtParser(jwt)
+            if (userID) {
+                const isAdded = await FavoriteService.isAdded(userID || '', movie?._id)
+                addFavorites(!!isAdded)
+            }
+            setLoad(true);
+        }
+
+        fetchMovie(params.title || '')
     }, []);
 
     return (
@@ -70,25 +69,24 @@ const Details = ({ match }: RouteComponentProps<TParams>) => {
                             <div className={classes.movie}>
                                 <h3>{movie?.title}</h3>
                                 <p className={classes.description}>{movie?.description}</p>
-                                <Favorite isAdded={isAddFavorites} movieId={movie?._id || ''} setAddFavorite={addFavorites} setActive={setActive} />
+                                {context.isAuthenticated ? (
+                                    <Favorite isAdded={isAddFavorites} movieId={movie?._id || ''} setAddFavorite={addFavorites} setActive={setActive} />
+                                ) : (
+                                    <React.Fragment></React.Fragment>
+                                )}
                                 <Message isActive={isActive} message='You must register or log in to your account' />
                             </div>
                         </div>
                         <Review title={movie?.title || ''} />
                     </section>
                 ) : (
-                    <React.Fragment></React.Fragment>
+                    <React.Fragment>
+                        <Alert severity="info">Loading...</Alert>
+                    </React.Fragment>
                 )
             }
         </React.Fragment>
     )
 }
 
-export default Details;
-
-function parseJwt(token: string) {
-    if (!token) { return; }
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace('-', '+').replace('_', '/');
-    return JSON.parse(window.atob(base64));
-}
+export default Details

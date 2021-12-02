@@ -6,10 +6,8 @@ import Favorite from './Favorite';
 type MovieProps = {
     id: string;
     imageUrl: string;
-    movieLink: string;
     title: string;
     description: string;
-    isAdded: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -19,34 +17,26 @@ const useStyles = makeStyles((theme: Theme) =>
             margin: '50px 120px'
         },
         movie: {
-            margin: '0px 30px',
+            margin: '0px',
+            display: 'flex',
+            flexDirection: 'column'
         },
         description: {
             maxWidth: '55em'
+        },
+        a: {
+            textAlign: 'center'
         }
     }),
 );
 
 const Movie: React.FC<MovieProps> = props => {
     const classes = useStyles();
-    const [isAddFavorites, addFavorites] = useState(false);
-    const [isActive, setActive] = useState(false);
-
-    useEffect(() => {
-        if (props.isAdded) {
-            addFavorites(props.isAdded);
-        }
-    })
-
     return (
         <div className={classes.searchList}>
-            <img src={props.imageUrl} />
             <div className={classes.movie}>
-                <h3>
-                    <Link to={props.movieLink}>{props.title}</Link>
-                </h3>
-                <p className={classes.description}>{props.description}</p>
-                <Favorite isAdded={isAddFavorites} movieId={props.id} setAddFavorite={addFavorites} setActive={setActive} />
+                <Link to={`/movies/${props?.title}`}>{props?.title}</Link>
+                <img src={props?.imageUrl} />
             </div>
         </div>
     )

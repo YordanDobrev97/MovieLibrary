@@ -1,5 +1,5 @@
-import mongoose from '../config/db';
-import IUser from '../interfaces/user';
+import mongoose from '../config/db'
+import IUser from '../interfaces/user'
 
 const UserSchema: mongoose.Schema = new mongoose.Schema(
     {
@@ -8,5 +8,5 @@ const UserSchema: mongoose.Schema = new mongoose.Schema(
     }
 )
 
-export default mongoose.model<IUser>('User', UserSchema);
+export default mongoose.model<IUser>('User', UserSchema)
 
