@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import jtw from 'jsonwebtoken'
 import User from '../entities/User'
+import IUser from '../interfaces/user'
 import Movie from '../entities/Movie'
 import Favorite from '../entities/Favorite'
 const privateKey = "secret"
@@ -34,7 +35,7 @@ const register = async (username: string, password: string) => {
 }
 
 const login = async (username: string, password: string) => {
-    const user = await User.findOne({ username: username }).lean()
+    const user: IUser = await User.findOne({ username: username }).lean()
     const comparePass: boolean = await bcrypt.compare(password, user?.password || '')
 
     if (comparePass) {
@@ -44,7 +45,7 @@ const login = async (username: string, password: string) => {
     return null
 }
 
-function generateToken(id: Document) {
+function generateToken(id: any) {
     return jtw.sign(
         {
             userID: id,

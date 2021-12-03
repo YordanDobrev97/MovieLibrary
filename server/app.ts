@@ -9,6 +9,10 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
 
+app.get('/', (req, res) => {
+    res.json('Welcome to MovieLibrary API!')
+})
+
 app.use('/', router)
 
 try {
@@ -16,5 +20,5 @@ try {
         console.log(`Connected successfully on port ${PORT}`)
     });
 } catch (error) {
-    console.error(`Error occured: ${error.message}`)
+    console.log(`Error occured: ${error.message}`)
 }
