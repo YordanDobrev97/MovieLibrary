@@ -1,40 +1,29 @@
 import React, { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
-import Btn from './Button'
+import { TextField, Button } from '@material-ui/core'
+
 import UserService from '../services/user'
 import { useCookies } from 'react-cookie'
 import AuthContext from '../context/AuthContext'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        registerSection: {
-            margin: '15px auto',
-            width: '50%',
-            background: '#f7f7f7',
-            padding: '20px'
+const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: theme.spacing(2),
+
+        '& .MuiTextField-root': {
+            margin: theme.spacing(1),
+            width: '300px',
         },
-        row: {
-            margin: '18px auto',
-            width: '30%',
+        '& .MuiButtonBase-root': {
+            margin: theme.spacing(2),
         },
-        input: {
-            borderRadius: '10px',
-            padding: '10px 5px'
-        },
-        button: {
-            background: 'white',
-            color: 'blue',
-            margin: '7px auto',
-            width: '80%',
-            padding: '9px',
-            borderRadius: '15px',
-            border: '1px solid blue',
-            fontSize: '16px',
-            textDecoration: 'none'
-        }
-    }),
-);
+    },
+}));
 
 const Register: React.FC = props => {
     const classes = useStyles();
@@ -45,7 +34,9 @@ const Register: React.FC = props => {
     const navigate = useNavigate()
     const context = useContext(AuthContext)
 
-    const registerUser = async () => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+
         if (confirmPassword !== password) {
             return null;
         }
@@ -57,31 +48,36 @@ const Register: React.FC = props => {
     }
 
     return (
-        <section className={classes.registerSection}>
-            <div className={classes.row}>
-                <input className={classes.input} type="text" placeholder="Username" onChange={(e) => {
-                    setUsername(e.target.value);
-                }} />
+        <form className={classes.root} onSubmit={handleSubmit}>
+            <TextField
+                label="Username"
+                variant="filled"
+                required
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+            />
+            <TextField
+                label="Password"
+                variant="filled"
+                type="password"
+                required
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+            />
+             <TextField
+                label="ConfirmPassword"
+                variant="filled"
+                type="password"
+                required
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+            />
+            <div>
+                <Button type="submit" variant="contained" color="primary">
+                    Signup
+                </Button>
             </div>
-
-            <div className={classes.row}>
-                <input className={classes.input} type="password" placeholder="Password" onChange={(e) => {
-                    setPassword(e.target.value)
-                }} />
-            </div>
-
-            <div className={classes.row}>
-                <input className={classes.input} type="password" placeholder="Confirm Password" onChange={(e) => {
-                    setConfirmPassword(e.target.value);
-                }} />
-            </div>
-
-            <div className={classes.row}>
-                <Btn bgc='white' c='blue' m='0px 7px 0px 11px' p='9px'
-                    br='18px' border='1px solid blue' text='Register' fz='16px'
-                    w='80%' onClick={registerUser.bind(this)} />
-            </div>
-        </section>
+        </form>
     )
 }
 
