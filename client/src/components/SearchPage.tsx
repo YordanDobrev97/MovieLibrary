@@ -45,7 +45,7 @@ const SearchPage: React.FC = props => {
                 <h2 className={classes.searchHeading}>Search</h2>
                 <Search search={search} />
 
-                {movie ? (
+                {/* {movie ? (
                     <Movie id={movie?._id || ''} imageUrl={movie?.imageUrl || ''}
                         title={movie?.title || ''} description={movie?.description || ''} />
                 ) : (
@@ -56,7 +56,7 @@ const SearchPage: React.FC = props => {
                             <React.Fragment></React.Fragment>
                         )}
                     </React.Fragment>
-                )}
+                )} */}
             </article>
         </section>
     )

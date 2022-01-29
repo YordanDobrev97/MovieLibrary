@@ -1,11 +1,12 @@
 import React, { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
+
+import { makeStyles } from '@material-ui/core/styles'
 import { TextField, Button } from '@material-ui/core'
 
-import UserService from '../services/user'
+import UserService from '../../services/user'
 import { useCookies } from 'react-cookie'
-import AuthContext from '../context/AuthContext'
+import AuthContext from '../../context/AuthContext'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -25,12 +26,12 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Register: React.FC = props => {
+export const Register: React.FC = () => {
     const classes = useStyles();
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [cookies, setCookie] = useCookies(['jwt'])
+    const [username, setUsername] = useState<string | null>('');
+    const [password, setPassword] = useState<string | null>('');
+    const [confirmPassword, setConfirmPassword] = useState<string | null>('');
+    const [_, setCookie] = useCookies(['jwt'])
     const navigate = useNavigate()
     const context = useContext(AuthContext)
 
@@ -41,10 +42,12 @@ const Register: React.FC = props => {
             return null;
         }
 
-        const token = await UserService.registerUser(username, password);
-        setCookie('jwt', token)
-        context.setAuthenticated(true)
-        navigate('/')
+        if (username && password) {
+            const token = await UserService.registerUser(username, password);
+            setCookie('jwt', token)
+            context.setAuthenticated(true)
+            navigate('/')
+        }
     }
 
     return (
@@ -80,5 +83,3 @@ const Register: React.FC = props => {
         </form>
     )
 }
-
-export default Register;

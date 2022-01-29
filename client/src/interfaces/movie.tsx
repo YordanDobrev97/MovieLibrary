@@ -1,7 +1,7 @@
 export default interface Movie {
     _id: string;
-    title: string;
-    imageUrl: string;
+    name: string;
+    image: {medium: string};
     description: string;
     isAdded: boolean;
 }

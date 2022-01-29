@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
+
+import { Container, Grid, Theme } from '@mui/material'
+import {makeStyles, createStyles}  from '@mui/styles'
 import MovieService from '../services/movie'
 import { Link } from 'react-router-dom'
-import IMovie from '../interfaces/movie'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -12,23 +13,28 @@ const useStyles = makeStyles((theme: Theme) =>
         movies: {
             display: 'flex',
             flexWrap: 'wrap',
-            justifyContent: 'space-between',
             alignItems: 'center',
             margin: 'auto',
-            width: '90%',
+            width: '80%',
         }
     }),
 );
 
+interface Movie {
+    title: string;
+    backdrop_path: string;
+}
+
 const MovieContainer = () => {
     const classes = useStyles()
     const [isLoad, setLoad] = useState(false)
-    const [movies, setMovies] = useState<IMovie[]>([])
+    const [movies, setMovies] = useState<Movie[]>([])
 
     useEffect(() => {
         const fetchMovie = async () => {
             const movies = await MovieService.getAll()
-            setMovies(movies)
+            console.log(movies)
+            setMovies(movies.results)
             setLoad(true)
         }
         fetchMovie()
@@ -38,18 +44,19 @@ const MovieContainer = () => {
             <h2 className={classes.favorites}>Your Favorites</h2>
             {
                 isLoad ? (
-                    <div className={classes.movies}>
+                    <Grid className={classes.movies} container sx={{ maxWidth:'80%'  }}>
                         {movies.map((movie) => {
-                            const movieLink = `/movies/${movie.title}`;
+                            const movieLink = `/movies/${movie.title}`
+                            const imageUrl = `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`;
                             return (
-                                <div key={movie._id}>
+                                <Grid key={movie.title} item xs={3}>
                                     <Link to={movieLink}>
-                                        <img src={movie.imageUrl} />
+                                        <img style={{height: '200px'}} src={imageUrl} />
                                     </Link>
-                                </div>
+                                </Grid>
                             )
                         })}
-                    </div>
+                    </Grid>
                 ) : (
                     <React.Fragment></React.Fragment>
                 )

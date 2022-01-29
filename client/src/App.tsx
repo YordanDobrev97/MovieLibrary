@@ -1,23 +1,25 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
+import { useCookies } from 'react-cookie'
+
 import Home from './components/Home'
-import Register from './components/Register'
-import Login from './components/Login'
+import {Register} from './components/auth/Register'
+import {Login} from './components/auth/Login'
 import SearchPage from './components/SearchPage'
 import Details from './components/Details'
-import Profile from './components/Profile'
+import {Profile} from './components/user/Profile'
 import Navbar from './components/Navbar'
 import AuthContext from './context/AuthContext'
-import { useCookies } from 'react-cookie'
 
 import './App.css'
 
 const App = () => {
-  const [cookies] = useCookies(['jwt'])
+  const [cookies, _, remove] = useCookies(['jwt'])
   const [isAuthenticated, setAuthenticated] = useState(cookies?.jwt || false)
 
   const logout = () => {
     setAuthenticated(false)
+    remove('jwt')
   }
 
   return (

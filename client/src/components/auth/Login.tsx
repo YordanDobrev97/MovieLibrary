@@ -1,11 +1,12 @@
 import { useState, useContext } from 'react'
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
+import { useNavigate } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
+
+import { makeStyles } from '@material-ui/core/styles'
 import { TextField, Button } from '@material-ui/core'
 
-import UserService from '../services/user'
-import { useCookies } from 'react-cookie'
-import { useNavigate } from 'react-router-dom'
-import AuthContext from '../context/AuthContext'
+import UserService from '../../services/user'
+import AuthContext from '../../context/AuthContext'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -25,21 +26,24 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Login = () => {
+export const Login: React.FC = () => {
     const classes = useStyles();
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [cookies, setCookie] = useCookies(['jwt'])
+    const [username, setUsername] = useState<string | null>('')
+    const [password, setPassword] = useState<string | null>('')
+    const [_, setCookie] = useCookies(['jwt'])
     const navigate = useNavigate()
     const context = useContext(AuthContext)
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        const token: string = await UserService.loginUser(username, password)
-        context.setAuthenticated(true)
-        setCookie("jwt", token)
-        navigate('/')
+        if (username && password) {
+            const token: string = await UserService.loginUser(username, password)
+            context.setAuthenticated(true)
+            setCookie("jwt", token)
+            navigate('/')
+        }
+
     }
     return (
         <form className={classes.root} onSubmit={handleSubmit}>
@@ -66,5 +70,3 @@ const Login = () => {
         </form>
     )
 }
-
-export default Login;
