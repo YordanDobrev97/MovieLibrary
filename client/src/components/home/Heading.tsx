@@ -1,8 +1,8 @@
 import React from 'react'
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
     createStyles({
         headingSection: {
             background: '#F5F5F5',
@@ -38,21 +38,14 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-type HeadingProps = {
-    heading: string;
-    description: string;
-}
-
-const Heading: React.FunctionComponent<HeadingProps> = props => {
+export const Heading: React.FC = () => {
     const classes = useStyles()
 
     return (
         <section id="heading-section" className={classes.headingSection}>
-            <h1 className={classes.heading}>{props.heading}</h1>
-            <p className={classes.description}>{props.description}</p>
+            <h1 className={classes.heading}>Heading</h1>
+            <p className={classes.description}>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed doeiusmod tempor incididunt ut labore et dolore magna aliqua</p>
             <Link className={classes.searchLink} to='/search'>Search</Link>
         </section>
     )
 }
-
-export default Heading

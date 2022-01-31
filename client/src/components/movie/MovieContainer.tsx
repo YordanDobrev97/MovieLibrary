@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react'
-
-import { Container, Grid, Theme } from '@mui/material'
-import {makeStyles, createStyles}  from '@mui/styles'
-import MovieService from '../services/movie'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-const useStyles = makeStyles((theme: Theme) =>
+import { Grid } from '@mui/material'
+import {makeStyles, createStyles}  from '@mui/styles'
+
+import MovieService from '../../services/movie'
+import { externalImage } from '../../utils/baseImage'
+
+const useStyles = makeStyles(() =>
     createStyles({
         favorites: {
             textAlign: 'center'
@@ -21,19 +23,18 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Movie {
-    title: string;
+    id: number;
     backdrop_path: string;
 }
 
-const MovieContainer = () => {
+export const MovieContainer = () => {
     const classes = useStyles()
-    const [isLoad, setLoad] = useState(false)
+    const [isLoad, setLoad] = useState<boolean>(false)
     const [movies, setMovies] = useState<Movie[]>([])
 
     useEffect(() => {
         const fetchMovie = async () => {
             const movies = await MovieService.getAll()
-            console.log(movies)
             setMovies(movies.results)
             setLoad(true)
         }
@@ -41,28 +42,22 @@ const MovieContainer = () => {
     }, []);
     return (
         <section>
-            <h2 className={classes.favorites}>Your Favorites</h2>
+            <h2 className={classes.favorites}>Popular Movies</h2>
             {
-                isLoad ? (
+                isLoad && (
                     <Grid className={classes.movies} container sx={{ maxWidth:'80%'  }}>
-                        {movies.map((movie) => {
-                            const movieLink = `/movies/${movie.title}`
-                            const imageUrl = `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`;
+                        {movies && movies.map((movie) => {
                             return (
-                                <Grid key={movie.title} item xs={3}>
-                                    <Link to={movieLink}>
-                                        <img style={{height: '200px'}} src={imageUrl} />
+                                <Grid key={movie.id} item xs={3}>
+                                    <Link to={ `/movies/${movie.id}`}>
+                                        <img style={{height: '200px'}} src={`${externalImage}/${movie.backdrop_path}`} />
                                     </Link>
                                 </Grid>
                             )
                         })}
                     </Grid>
-                ) : (
-                    <React.Fragment></React.Fragment>
                 )
             }
         </section>
     )
 }
-
-export default MovieContainer

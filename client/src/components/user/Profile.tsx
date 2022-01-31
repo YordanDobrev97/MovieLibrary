@@ -15,11 +15,13 @@ import {
 } from '@mui/material'
 
 import UserService from '../../services/user'
+import MovieService from '../../services/movie'
 import jwtParser from '../../utils/jwtParser'
 
-type UserMovie = {
+export interface UserMovie {
+    id: number;
     title: string;
-    imageUrl: string
+    backdrop_path: string
 }
 
 export const Profile: React.FC = () => {
@@ -31,14 +33,21 @@ export const Profile: React.FC = () => {
         const fetchMovies = async () => {
             const { userID } = jwtParser(cookies?.jwt)
             if (userID) {
-                const resMovies = await UserService.favoriteMovies(userID)
-                setMovies(resMovies)
+                const ids: UserMovie[] = await UserService.favoriteMovies(userID)
+                setMovies(await getMovies(ids))
                 setLoad(true)
             }
         }
 
         fetchMovies()
     }, [])
+
+    const getMovies = async (ids: UserMovie[]) => {
+        return await Promise.all(ids.map((movieObj) => {
+            const movieResponse = MovieService.getById(Number(movieObj))
+            return movieResponse
+        }))
+    }
 
     if (load && movies.length === 0) {
         return <Alert variant="outlined" severity="info">No movies added</Alert>
@@ -51,12 +60,13 @@ export const Profile: React.FC = () => {
             {load ? (
                 <Box style={{ display: 'flex', flexWrap: 'wrap' }}>
                     {movies && movies.map((movie) => {
+                         const imageUrl = `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`;
                         return (
                             <Card key={movie.title} style={{ maxWidth: '200px', minWidth: '200px', margin: '3px 10px' }}>
                                 <CardMedia
                                     component="img"
                                     height="140"
-                                    image={movie.imageUrl}
+                                    image={imageUrl}
                                     alt="movie"
                                 />
 
@@ -67,7 +77,7 @@ export const Profile: React.FC = () => {
                                 </CardContent>
 
                                 <CardActions>
-                                    <Link to={`/movies/${movie.title}`}>
+                                    <Link to={`/movies/${movie.id}`}>
                                         <Button variant="outlined">Details</Button>
                                     </Link>
                                 </CardActions>

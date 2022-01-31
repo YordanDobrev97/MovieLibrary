@@ -1,4 +1,5 @@
 import URL_API from '../utils/urlApi'
+import { UserMovie } from '../components/user/Profile'
 
 const registerUser = async (username: string, password: string) : Promise<string> => {
     const response = await fetch(`${URL_API}/api/auth/register`, {
@@ -28,11 +29,6 @@ const loginUser = async (username: string, password: string): Promise<string> =>
     });
     const res: string = await response.json();
     return res;
-}
-
-type UserMovie = {
-    title: string;
-    imageUrl: string
 }
 
 const favoriteMovies = async (userId: string): Promise<UserMovie[]> => {

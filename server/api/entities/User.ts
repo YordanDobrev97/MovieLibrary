@@ -1,5 +1,10 @@
 import mongoose from '../config/db'
-import IUser from '../interfaces/user'
+
+interface User {
+    _id: string;
+    username: string;
+    password: string;
+}
 
 const UserSchema: mongoose.Schema = new mongoose.Schema(
     {
@@ -8,5 +13,5 @@ const UserSchema: mongoose.Schema = new mongoose.Schema(
     }
 )
 
-export default mongoose.model<IUser>('User', UserSchema)
+export default mongoose.model<User>('User', UserSchema)
 

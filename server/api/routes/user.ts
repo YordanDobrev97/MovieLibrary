@@ -1,9 +1,9 @@
-import express, { Request, Response } from 'express'
+import express, { Request, Response, Router } from 'express'
 import UserService from '../services/user'
 import RatingService from '../services/rating'
 import FavoriteService from '../services/favorite'
 
-const router = express.Router()
+const router: Router = express.Router()
 
 router.post('/rating/add', async (req: Request, res: Response) => {
     const { note, rating, title } = req.body
@@ -17,15 +17,16 @@ router.get('/rating/all?:title', async (req: Request, res: Response) => {
     res.json(result)
 })
 
-router.post('/favorites/add', async (req: Request, res: Response) => {
-    const { userId, movieId } = req.body
+router.post('/favorites', async (req: Request, res: Response) => {
+    const userId: string = req.body.userId
+    const movieId: number = Number(req.body.movieId)
     const result = await FavoriteService.add(userId, movieId)
     res.json(result)
 })
 
-router.post('/favorites/remove', async (req: Request, res: Response) => {
-    const { userId, movieId } = req.body
-    const result = await FavoriteService.remove(userId, movieId)
+router.delete('/favorites/:movieId', async (req: Request, res: Response) => {
+    const { movieId } = req.params
+    const result = await FavoriteService.remove(Number(movieId))
     res.json(result)
 })
 

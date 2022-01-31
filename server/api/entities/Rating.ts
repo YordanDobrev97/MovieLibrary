@@ -1,5 +1,10 @@
 import mongoose from '../config/db'
-import IRating from '../interfaces/rating'
+
+interface Rating {
+    rating: number,
+    note: string,
+    title: string
+}
 
 const RatingSchema: mongoose.Schema = new mongoose.Schema(
     {
@@ -9,5 +14,5 @@ const RatingSchema: mongoose.Schema = new mongoose.Schema(
     }
 )
 
-export default mongoose.model<IRating>('Rating', RatingSchema)
+export default mongoose.model<Rating>('Rating', RatingSchema)
 

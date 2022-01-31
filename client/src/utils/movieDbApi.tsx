@@ -1,0 +1,1 @@
+export const externalAPI: string = 'https://api.themoviedb.org/3'

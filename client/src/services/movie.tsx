@@ -1,16 +1,23 @@
-import URL_API from '../utils/urlApi'
+import { externalAPI } from '../utils/movieDbApi'
+import { APIKEY } from '../utils/apiKey'
 
 const getAll = async () => {
-    const response = await fetch('https://api.themoviedb.org/3/trending/all/week?api_key=1c339541638a8ba1e9be6723deb72edd&language=en-US')
+    const response = await fetch(`${externalAPI}/movie/popular${APIKEY}`)
     return await response.json()
 }
 
-const getByTitle = async (title: string) => {
-    const response = await fetch(`${URL_API}/api/movies/${title}`)
+const getById = async (id: number) => {
+    const response = await fetch(`${externalAPI}/movie/${id}${APIKEY}`)
+    return await response.json()
+}
+
+const searchByTitle = async (title: string) => {
+    const response = await fetch(`${externalAPI}/search/multi${APIKEY}&language=en-US&query=${title}&page=1&include_adult=false`)
     return await response.json()
 }
 
 export default {
     getAll,
-    getByTitle,
+    getById,
+    searchByTitle
 }

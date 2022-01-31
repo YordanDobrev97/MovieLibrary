@@ -1,17 +1,18 @@
 import React, { useContext } from 'react'
 import { Link } from "react-router-dom"
-import { Box, Grid, AppBar, Toolbar } from '@material-ui/core'
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
-import Btn from './Button'
-import AuthContext from '../context/AuthContext'
 
-const useStyles = makeStyles((theme: Theme) =>
+import { Box, Grid, AppBar, Toolbar, Button } from '@mui/material'
+import { createStyles, makeStyles } from '@mui/styles'
+
+import AuthContext from '../../context/AuthContext'
+
+const useStyles = makeStyles(() =>
     createStyles({
         title: {
             color: 'black'
         },
         navigation: {
-            background: '#F8F9FA',
+            background: '#FBF8F1',
         },
         searcTextField: {
             marginLeft: '45px',
@@ -28,17 +29,27 @@ const useStyles = makeStyles((theme: Theme) =>
             border: '1px solid blue',
             fontSize: '16px',
             textDecoration: 'none'
+        },
+        grid: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: "baseline",
+            background: 'whitesmoke'
         }
     }),
 );
 
-const Navbar = (props: any) => {
+interface NavbarProps {
+    logout: () => void
+}
+
+export const Navbar: React.FC<NavbarProps> = ({logout}: NavbarProps) => {
     const classes = useStyles()
     const context = useContext(AuthContext)
 
     return (
         <AppBar position="static" className={classes.navigation}>
-            <Grid container direction="row" justify="space-between" alignItems="baseline">
+            <Grid container className={classes.grid}>
                 <Toolbar className={classes.title}>
                     <Link className={classes.link} to='/'>My Movie Collection</Link>
                 </Toolbar>
@@ -47,8 +58,7 @@ const Navbar = (props: any) => {
                         context.isAuthenticated ? (
                             <React.Fragment>
                                 <Link className={classes.button} to='/profile'>Profile</Link>
-                                <Btn bgc='white' c='green' m='0px 7px 0px 11px' p='9px' br='0'
-                                    border='1px solid green' text='Logout' fz='16px' w='50%' onClick={props.logout}>Logout</Btn>
+                                <Button onClick={logout}>Logout</Button>
                             </React.Fragment>
                         ) : (
                             <React.Fragment>
@@ -62,5 +72,3 @@ const Navbar = (props: any) => {
         </AppBar>
     )
 }
-
-export default Navbar

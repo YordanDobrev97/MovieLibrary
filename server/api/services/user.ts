@@ -1,24 +1,26 @@
 import bcrypt from 'bcrypt'
 import jtw from 'jsonwebtoken'
+
 import User from '../entities/User'
-import IUser from '../interfaces/user'
-import Movie from '../entities/Movie'
 import Favorite from '../entities/Favorite'
+
 const privateKey = "secret"
+
+interface Movie {
+    movieId: number;
+}
 
 const existUser = async (userId: string) => {
     const user = await User.exists({ _id: userId })
     return user
 }
 
-const favoriteMovies = async (userId: string) => {
-    const userMovies = await Favorite.find().where('userId').in([userId]).exec()
-    const movies = await Promise.all(userMovies.map(async (movieObj): Promise<any> => {
-        const movie = await Movie.findById(movieObj.movieId)
-        return movie
-    }))
-
-    return movies
+const favoriteMovies = async (userId: string): Promise<number[]> => {
+    const userMovies = await Favorite.find().where('userId').in([userId]).lean() as []
+    const ids: number[] = userMovies.map((movie: Movie) => {
+        return movie.movieId
+    })
+    return ids
 }
 
 const register = async (username: string, password: string) => {
@@ -35,7 +37,7 @@ const register = async (username: string, password: string) => {
 }
 
 const login = async (username: string, password: string) => {
-    const user: IUser = await User.findOne({ username: username }).lean()
+    const user = await User.findOne({ username: username }).lean()
     const comparePass: boolean = await bcrypt.compare(password, user?.password || '')
 
     if (comparePass) {

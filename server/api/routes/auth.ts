@@ -1,7 +1,7 @@
-import express, { Request, Response } from 'express'
+import express, { Request, Response, Router } from 'express'
 import UserService from '../services/user'
 
-const router = express.Router()
+const router: Router = express.Router()
 
 router.post('/register', async (req: Request, res: Response) => {
     const { username, password } = req.body
