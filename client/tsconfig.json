@@ -1,13 +1,17 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "outDir": "./target/",
+    "sourceMap": true,
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
+    "typeRoots": ["node_modules/@types"],
     "allowJs": true,
     "skipLibCheck": true,
+    "noImplicitAny": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
@@ -21,6 +25,10 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "src/__tests__"
+  ],
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts"
   ]
 }

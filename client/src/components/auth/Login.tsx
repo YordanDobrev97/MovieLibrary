@@ -48,6 +48,7 @@ export const Login: React.FC = () => {
     return (
         <form className={classes.root} onSubmit={handleSubmit}>
             <TextField
+                id="username"
                 label="Username"
                 variant="filled"
                 required
@@ -55,6 +56,7 @@ export const Login: React.FC = () => {
                 onChange={e => setUsername(e.target.value)}
             />
             <TextField
+                id="password"
                 label="Password"
                 variant="filled"
                 type="password"
