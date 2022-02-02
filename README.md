@@ -9,6 +9,7 @@
 * React
 * TypeScript
 * Material UI
+* Jest
 
 # Getting started
 - Clone this repo
