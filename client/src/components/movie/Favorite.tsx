@@ -34,9 +34,9 @@ export const Favorite: React.FC<FavoriteProps> = ({ movieId, isAdded, setAddFavo
 
     return (
         isAdded ? (
-            <Button variant="outlined" color="error" onClick={removeFavorite}>Remove From Favorites</Button>
+            <Button data-testid="removeBtn" variant="outlined" color="error" onClick={removeFavorite}>Remove From Favorites</Button>
         ) : (
-            <Button variant="outlined" color="success" onClick={addFavorite}>Add to favorites</Button>
+            <Button data-testid="addButton" variant="outlined" color="success" onClick={addFavorite}>Add to favorites</Button>
         )
     )
 }

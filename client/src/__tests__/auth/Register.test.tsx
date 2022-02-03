@@ -13,7 +13,7 @@ describe('Test Register Page', () => {
     });
 
      it('test submit register from', () => {
-        const fakeEvent = { preventDefault: () => console.log('preventDefault') };
+        const fakeEvent = { preventDefault: () => {} };
         expect(wrapper.find('form').simulate('submit', fakeEvent)).toBeTruthy()
      })
 })

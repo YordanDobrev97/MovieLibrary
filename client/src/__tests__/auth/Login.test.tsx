@@ -17,7 +17,7 @@ describe('Test Login Page', () => {
      });
 
      it('test submit login from', () => {
-        const fakeEvent = { preventDefault: () => console.log('preventDefault') };
+        const fakeEvent = { preventDefault: () => {} };
         expect(wrapper.find('form').simulate('submit', fakeEvent)).toBeTruthy()
      })
 })

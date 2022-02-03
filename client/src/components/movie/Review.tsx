@@ -9,7 +9,7 @@ interface ReviewProps {
     title: string,
 }
 
-const Review: React.FC<ReviewProps> = props => {
+export const Review: React.FC<ReviewProps> = props => {
     const [rating, setRating] = useState<number>(0)
     const [note, setNote] = useState<string>('')
     const [success, setSuccessValue] = useState<boolean>(false)
@@ -39,21 +39,21 @@ const Review: React.FC<ReviewProps> = props => {
                     <Rating name="half-rating" value={rating} onChange={(event, newValue) => {
                         setRating(newValue || 0)
                     }} defaultValue={0} precision={1} />
-                    {success && (<Alert>Successfully vote</Alert>)}
+                    {success && (<Alert id="success-message" data-testid="success-message">Successfully vote</Alert>)}
                     <TextField
+                        data-testid="note"
                         id="filled-textarea"
                         rows={5}
                         placeholder="Your note..."
+                        aria-label="note-input"
                         multiline
                         variant="filled"
                         onChange={(e) => {
                             setNote(e.target.value);
                         }}
                     />
-                    <Button onClick={addReview} variant="contained">Send</Button>
+                    <Button data-testid="addReview" onClick={addReview} variant="contained">Send</Button>
                 </Box>)}
         </Container>
     )
 }
-
-export default Review
